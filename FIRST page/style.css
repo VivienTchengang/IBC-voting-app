@@ -1,0 +1,133 @@
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+}
+
+.container {
+    display: flex;
+    flex-direction: column; 
+    justify-content: space-between; 
+    align-items: stretch; 
+    height: 100vh; 
+    width: 100%; 
+    max-width: 480px; 
+    margin: 0 auto; 
+    background: #ffffff; 
+    border: 1px solid #ddd; 
+    border-radius: 10px; 
+    overflow: hidden; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+}
+
+
+
+.header {
+    display: flex;
+    justify-content: space-around;
+    padding: 15px;
+    background: #007bff;
+    color: #fff;
+}
+
+.header button {
+    border: none;
+    background: transparent;
+    color: #fff;
+    font-size: 16px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.header button.active {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.average {
+    text-align: center;
+    padding: 20px;
+    background: #eef7ff;
+    flex-grow: 1;
+}
+
+.average img {
+    width: 100px;
+    height: auto;
+}
+
+.average p {
+    margin-top: 10px;
+    font-size: 18px;
+    color: #555;
+}
+
+.criteria {
+    padding: 20px;
+    flex-grow: 2;
+    overflow-y: auto;
+}
+
+.criteria .criterion p {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.criteria .criterion .stars span {
+    font-size: 24px;
+    color: #ddd;
+    cursor: pointer;
+}
+
+.criteria .criterion .stars span.selected {
+    color: #007bff;
+}
+
+
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background: #007bff;
+    color: #fff;
+}
+
+.navigation button {
+    border: none;
+    background: #ffffff;
+    color: #007bff;
+    padding: 10px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-around;
+    padding: 15px;
+    background: #0056b3;
+    color: #fff;
+    font-size: 14px;
+}
+
+.footer div {
+    cursor: pointer;
+}
+
+.footer div.active {
+    font-weight: bold;
+}
+
+.response-section div {
+    display: none;
+    text-align: center;
+}
+
+.response-section div.active {
+    display: block;
+}
