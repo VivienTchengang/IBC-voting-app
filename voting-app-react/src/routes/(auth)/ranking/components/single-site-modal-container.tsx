@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from "react"
-import { Site } from "../../../data/sites"
-import { getAverage } from "../../../utils/getAverage"
-import { StartFillSVG } from "../../../components/svg/star-fill-svg"
+import { Site } from "../../../../data/sites"
+import { getAverage } from "../../../../utils/getAverage"
+import { StartFillSVG } from "../../../../components/svg/star-fill-svg"
 
 interface Props {
   selectedSite: Site,

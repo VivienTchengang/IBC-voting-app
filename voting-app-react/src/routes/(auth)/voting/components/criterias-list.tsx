@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react"
-import { StartFillSVG } from "../../../components/svg/star-fill-svg"
-import { StarSVG } from "../../../components/svg/star-svg"
+import { StartFillSVG } from "../../../../components/svg/star-fill-svg"
+import { StarSVG } from "../../../../components/svg/star-svg"
 
 interface Props {
   criterias: { index: number, title: string, note: number }[],

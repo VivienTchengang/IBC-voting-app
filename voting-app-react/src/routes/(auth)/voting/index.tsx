@@ -1,14 +1,14 @@
 import { useContext, useState } from "react"
 import { HeaderSiteList } from "./components/header-site-list"
-import { DataContext } from "../layout"
-import { Site } from "../../data/sites"
+import { Site } from "../../../data/sites"
 import { SelectedSiteContainer } from "./components/selected-site-container"
 import { CriteriasList } from "./components/criterias-list"
 import { ButtonsContainer } from "./components/buttons-container"
 import SubmitModalContainer from "./components/submit-modal-container"
 import { AlertModal } from "./components/alert-modal"
+import { DataContext } from "../auth-layout"
 
-export function Root() {
+export function Voting() {
   const { sites, criterias: dataCriterias } = useContext(DataContext)!
   const [selectedSite, setSelectedSite] = useState<Site | null>(sites[0])
 

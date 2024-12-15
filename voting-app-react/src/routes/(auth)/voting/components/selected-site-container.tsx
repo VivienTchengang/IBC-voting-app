@@ -1,7 +1,7 @@
-import { StartFillSVG } from "../../../components/svg/star-fill-svg";
-import { StarSVG } from "../../../components/svg/star-svg";
-import { Site } from "../../../data/sites"
-import { getAverage } from "../../../utils/getAverage";
+import { StartFillSVG } from "../../../../components/svg/star-fill-svg";
+import { StarSVG } from "../../../../components/svg/star-svg";
+import { Site } from "../../../../data/sites"
+import { getAverage } from "../../../../utils/getAverage";
 
 interface Props {
   selectedSite: Site

@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useContext } from "react"
-import { DataContext } from "../../layout"
-import { Site } from "../../../data/sites";
+import { Site } from "../../../../data/sites";
+import { DataContext } from "../../auth-layout";
 
 interface Props {
   selectedSite: Site | null,

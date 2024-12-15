@@ -1,10 +1,12 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import { Root } from './routes/index'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { Layout } from './routes/layout'
-import { Ranking } from './routes/ranking/ranking'
+import { Ranking } from './routes/(auth)/ranking/ranking'
+import { Login } from './routes/login/login'
+import { Voting } from './routes/(auth)/voting'
+import { AuthLayout } from './routes/(auth)/auth-layout'
 
 const router = createBrowserRouter([
   {
@@ -12,14 +14,23 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Root />
+        element: <Login />
       },
       {
-        path: 'ranking',
-        element: <Ranking />
+        element: <AuthLayout />,
+        children: [
+          {
+            path: 'voting',
+            element: <Voting />
+          },
+          {
+            path: 'ranking',
+            element: <Ranking />
+          }
+        ]
       }
     ]
-  }
+  },
 ])
 
 createRoot(document.getElementById('root')!).render(

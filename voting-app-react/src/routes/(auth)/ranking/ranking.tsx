@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { ResultBoard } from "./components/result-board";
 import ResultList from "./components/result-list";
 import { SingleSiteModalContainer } from "./components/single-site-modal-container";
-import { Site } from "../../data/sites";
+import { Site } from "../../../data/sites";
 
 export function Ranking() {
   const [isLoading, setIsLoading] = useState(true) ;

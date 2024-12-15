@@ -1,11 +1,11 @@
 import { Dispatch, SetStateAction, useContext } from "react"
-import { DataContext } from "../../layout"
-import { StartFillSVG } from "../../../components/svg/star-fill-svg"
-import { GoldMedal } from "../../../components/svg/gold-medal"
-import { SilverMedal } from "../../../components/svg/silver-medal"
-import { BronzeMedal } from "../../../components/svg/bronze-medal"
-import { getSiteScore } from "../../../utils/getSiteScore"
-import { Site } from "../../../data/sites"
+import { StartFillSVG } from "../../../../components/svg/star-fill-svg"
+import { GoldMedal } from "../../../../components/svg/gold-medal"
+import { SilverMedal } from "../../../../components/svg/silver-medal"
+import { BronzeMedal } from "../../../../components/svg/bronze-medal"
+import { getSiteScore } from "../../../../utils/getSiteScore"
+import { Site } from "../../../../data/sites"
+import { DataContext } from "../../auth-layout"
 
 interface Props {
   setSelectedSite: Dispatch<SetStateAction<Site | null>>,

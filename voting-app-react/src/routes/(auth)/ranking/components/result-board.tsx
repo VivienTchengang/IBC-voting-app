@@ -1,6 +1,6 @@
 import { useContext } from "react"
-import { DataContext } from "../../layout"
-import { getSiteScore } from "../../../utils/getSiteScore";
+import { getSiteScore } from "../../../../utils/getSiteScore";
+import { DataContext } from "../../auth-layout";
 
 export function ResultBoard() {
   const { sites } = useContext(DataContext)!
