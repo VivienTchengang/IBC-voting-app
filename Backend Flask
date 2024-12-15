@@ -14,7 +14,7 @@ db_config = {
 # Route principale pour servir la page HTML
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('1page.html')
 
 # Route pour soumettre un vote
 @app.route('/submit-vote', methods=['POST'])
