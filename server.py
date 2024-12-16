@@ -15,35 +15,47 @@ app.config["JWT_SECRET_KEY"] = "supersecretkey"  # Don't hardcode this in produc
 # MySQL database connection configuration
 db_config = {
     'user': 'root', 
-    'password': 'password', 
+    'password': '', 
     'host': 'localhost', 
-    'database': 'votes'
+    'database': 'fasanicebox-stud',
+    'port': '3306'
 }
+
+# allow cross-origin requests
+@app.after_request
+
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:5173') #localhost 5173 is the React front-end
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,POST,DELETE')
+    return response
 
 # User registration route (signup)
 @app.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
-    username = data.get('username')
+    email = data.get('email')
     password = data.get('password')
+    print(email, password)
 
-    if not username or not password:
-        return jsonify({"error": "Username and password are required"}), 400
+    if not email or not password:
+        print("email and password are required")
+        return jsonify({"error": "email and password are required"}), 400
     
     # Check if the user already exists
     conn = mysql.connector.connect(**db_config)
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
+    cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
     existing_user = cursor.fetchone()
 
     if existing_user:
-        return jsonify({"error": "Username already exists"}), 400
+        return jsonify({"error": "email already exists"}), 400
     
     # Hash the password
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
     
     # Insert the new user into the database
-    cursor.execute("INSERT INTO users (username, password) VALUES (%s, %s)", (username, hashed_password))
+    cursor.execute("INSERT INTO users (email, password) VALUES (%s, %s)", (email, hashed_password))
     conn.commit()
     cursor.close()
     conn.close()
@@ -70,21 +82,21 @@ def delete_user():
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
-    username = data.get('username')
+    email = data.get('email')
     password = data.get('password')
 
-    if not username or not password:
-        return jsonify({"error": "Username and password are required"}), 400
+    if not email or not password:
+        return jsonify({"error": "email and password are required"}), 400
     
     # Check user credentials
     conn = mysql.connector.connect(**db_config)
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
+    cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
     user = cursor.fetchone()
     
-    if user and bcrypt.check_password_hash(user[2], password):  # user[2] is the password hash
+    if user and bcrypt.check_password_hash(user[3], password):  # user[2] is the password hash
         # Generate JWT token on successful login
-        access_token = create_access_token(identity={'id': user[0], 'username': user[1]})
+        access_token = create_access_token(identity={'id': user[0], 'email': user[2]})
         return jsonify({"access_token": access_token}), 200
     
     return jsonify({"error": "Invalid credentials"}), 401
