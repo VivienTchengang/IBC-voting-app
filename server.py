@@ -45,7 +45,7 @@ def register():
     # Check if the user already exists
     conn = mysql.connector.connect(**db_config)
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+    cursor.execute("SELECT * FROM TLS_COK_DLA_users WHERE email = %s", (email,))
     existing_user = cursor.fetchone()
 
     if existing_user:
@@ -55,7 +55,7 @@ def register():
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
     
     # Insert the new user into the database
-    cursor.execute("INSERT INTO users (email, password) VALUES (%s, %s)", (email, hashed_password))
+    cursor.execute("INSERT INTO TLS_COK_DLA_users (email, password) VALUES (%s, %s)", (email, hashed_password))
     conn.commit()
     cursor.close()
     conn.close()
@@ -71,7 +71,7 @@ def delete_user():
     # Delete the user from the database
     conn = mysql.connector.connect(**db_config)
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM users WHERE id = %s", (current_user['id'],))
+    cursor.execute("DELETE FROM TLS_COK_DLA_users WHERE id = %s", (current_user['id'],))
     conn.commit()
     cursor.close()
     conn.close()
@@ -91,12 +91,12 @@ def login():
     # Check user credentials
     conn = mysql.connector.connect(**db_config)
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+    cursor.execute("SELECT * FROM TLS_COK_DLA_users WHERE email = %s", (email,))
     user = cursor.fetchone()
     
-    if user and bcrypt.check_password_hash(user[3], password):  # user[2] is the password hash
+    if user and bcrypt.check_password_hash(user[2], password):  # user[2] is the password hash
         # Generate JWT token on successful login
-        access_token = create_access_token(identity={'id': user[0], 'email': user[2]})
+        access_token = create_access_token(identity={'id': user[0], 'email': user[1]})
         return jsonify({"access_token": access_token}), 200
     
     return jsonify({"error": "Invalid credentials"}), 401
@@ -119,7 +119,7 @@ def submit_vote():
     
     # Insert the vote into the database
     cursor.execute("""
-        INSERT INTO votes (user_id, location, criteria1, criteria2, criteria3, criteria4, criteria5) 
+        INSERT INTO TLS_COK_DLA-votes (user_id, location, criteria1, criteria2, criteria3, criteria4, criteria5) 
         VALUES (%s, %s, %s, %s, %s, %s, %s)
     """, (current_user['id'], location, *criteria))
     conn.commit()
@@ -129,7 +129,7 @@ def submit_vote():
     
     return jsonify({'message': 'Vote submitted successfully!'}), 200
 
-# Route to get the user's scores (votes)
+# Route to get the user's scores (TLS_COK_DLA-votes)
 @app.route('/get-scores', methods=['GET'])
 @jwt_required()  # Ensure the user is authenticated
 def get_scores():
@@ -139,8 +139,8 @@ def get_scores():
     conn = mysql.connector.connect(**db_config)
     cursor = conn.cursor()
     
-    # Retrieve the user's votes from the database
-    cursor.execute("SELECT * FROM votes WHERE user_id = %s", (current_user['id'],))
+    # Retrieve the user's TLS_COK_DLA-votes from the database
+    cursor.execute("SELECT * FROM TLS_COK_DLA-votes WHERE user_id = %s", (current_user['id'],))
     votes = cursor.fetchall()
     
     cursor.close()
