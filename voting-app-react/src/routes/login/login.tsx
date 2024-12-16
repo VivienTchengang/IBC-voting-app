@@ -25,13 +25,13 @@ export function Login() {
             const response = await loginUser(String(email), String(password));
 
             const { error, access_token } = response;
-            if (error) throw error;
+            if (error) throw new Error(error);
 
             localStorage.setItem("item", access_token);
 
             window.location.href = "/voting";
         } catch (error) {
-            alert((error as Error).message);
+            alert((error as Error).message || "Error logging in");
         } finally {
             setLoading(false);
         }
