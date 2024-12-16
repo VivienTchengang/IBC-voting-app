@@ -62,6 +62,25 @@ def register():
     
     return jsonify({"message": "User created successfully"}), 201
 
+# route to get all campuses
+@app.route('/get-campuses', methods=['GET'])
+def get_campuses():
+    conn = mysql.connector.connect(**db_config)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM TLS_COK_DLA_campuses")
+    campuses = cursor.fetchall()
+    cursor.close()
+    conn.close()
+
+    result = []
+    for campus in campuses:
+        result.append({
+            'id': campus[0],
+            'name': campus[1],
+        })
+
+    return jsonify(result), 200
+
 # User deletion route (delete account)
 @app.route('/delete-user', methods=['DELETE'])
 @jwt_required()  # Ensure the user is authenticated with a valid JWT token
@@ -107,29 +126,38 @@ def login():
 def submit_vote():
     current_user = get_jwt_identity()
     data = request.get_json()
-    location = data.get('location')
-    criteria = data.get('criteria')
+    campus = data.get('campus')
+    criterion = data.get('criterion')
 
-    if not location or len(criteria) != 5:
-        return jsonify({'error': 'Invalid data'}), 400
+    # votes has field user_id, campus_id, criterion_id, from tabels TLS_COK_DLA_users, TLS_COK_DLA_campuses, TLS_COK_DLA_criteria
+
+    if not campus or not criterion:
+        return jsonify({"error": "campus and criterion are required"}), 400
     
     # Connect to the database
     conn = mysql.connector.connect(**db_config)
     cursor = conn.cursor()
-    
+
+    # Retrieve the user's TLS_COK_DLA_votes from the database
+    cursor.execute("SELECT * FROM TLS_COK_DLA_votes WHERE user_id = %s", (current_user['id'],))
+    votes = cursor.fetchall()
+
+    # Check if the user has already voted for the campus
+    for vote in votes:
+        if vote[2] == campus:
+            return jsonify({"error": "You have already voted for this campus"}), 400
+        
     # Insert the vote into the database
-    cursor.execute("""
-        INSERT INTO TLS_COK_DLA-votes (user_id, location, criteria1, criteria2, criteria3, criteria4, criteria5) 
-        VALUES (%s, %s, %s, %s, %s, %s, %s)
-    """, (current_user['id'], location, *criteria))
+
+    cursor.execute("INSERT INTO TLS_COK_DLA_votes (user_id, campus_id, criterion_id) VALUES (%s, %s, %s)", (current_user['id'], campus, criterion))
+
     conn.commit()
-    
     cursor.close()
     conn.close()
-    
-    return jsonify({'message': 'Vote submitted successfully!'}), 200
 
-# Route to get the user's scores (TLS_COK_DLA-votes)
+    return jsonify({"message": "Vote submitted successfully"}), 201
+
+# Route to get the user's scores (TLS_COK_DLA_votes)
 @app.route('/get-scores', methods=['GET'])
 @jwt_required()  # Ensure the user is authenticated
 def get_scores():
@@ -139,8 +167,8 @@ def get_scores():
     conn = mysql.connector.connect(**db_config)
     cursor = conn.cursor()
     
-    # Retrieve the user's TLS_COK_DLA-votes from the database
-    cursor.execute("SELECT * FROM TLS_COK_DLA-votes WHERE user_id = %s", (current_user['id'],))
+    # Retrieve the user's TLS_COK_DLA_votes from the database
+    cursor.execute("SELECT * FROM TLS_COK_DLA_votes WHERE user_id = %s", (current_user['id'],))
     votes = cursor.fetchall()
     
     cursor.close()
@@ -150,7 +178,7 @@ def get_scores():
     result = []
     for vote in votes:
         result.append({
-            'location': vote[2],
+            'campus': vote[2],
             'criteria1': vote[3],
             'criteria2': vote[4],
             'criteria3': vote[5],
